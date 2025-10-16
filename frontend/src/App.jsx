@@ -1,10 +1,9 @@
-function App() {
-
+function Home() {
   return (
     <>
-      {/* Start working here... */}
+      <h1 className="font-bold text-4xl">Inicio</h1>
     </>
   )
 }
 
-export default App
+export default Home
