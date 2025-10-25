@@ -1,6 +1,51 @@
+import { useState } from "react"
 import { Link } from "react-router"
+import Alert from "../components/Alert";
+import axios from "../config/axios";
 
 const ForgotPassword = () => {
+    const [email, setEmail] = useState("");
+    const [alert, setAlert] = useState({
+        message: "",
+        error: false
+    });
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+
+        if (email === "") {
+            setAlert({
+                message: "Ingresa un emáil válido",
+                error: true
+            });
+
+            return;
+        }
+
+        // Eliminamos cualquier alerta que exista
+        setAlert({});
+
+        try {
+            const { data } = await axios.post("/veterinarians/forgot-password", {
+                email
+            });
+
+            setAlert({
+                message: data.message,
+                error: false
+            });
+        } catch (error) {
+            const { data } = error.response;
+
+            setAlert({
+                message: data.message,
+                error: true
+            })
+        }
+    }
+
+    const { message } = alert;
+
     return (
         <>
             <div>
@@ -8,8 +53,10 @@ const ForgotPassword = () => {
             </div>
             <div className="shadow-xl rounded-xl p-8 bg-white">
                 <div>
-                    <form className="flex flex-col gap-5">
-
+                    <form 
+                        className="flex flex-col gap-5"
+                        onSubmit={handleSubmit}>
+                        {message && <Alert alert={alert}/>}
                         <div className="flex flex-col">
                             <label 
                                 htmlFor="email"
@@ -23,6 +70,7 @@ const ForgotPassword = () => {
                                 type="email"
                                 placeholder="johndoe@gmail.com"
                                 className="bg-gray-50 border border-gray-300 rounded-[8px] p-2 mt-2"
+                                onInput={e => setEmail(e.target.value.trim())}
                             />
                         </div>
 
