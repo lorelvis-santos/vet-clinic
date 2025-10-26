@@ -1,6 +1,57 @@
-import { Link } from "react-router"
+import { useState } from "react";
+import { Link, useNavigate } from "react-router";
+import useAuth from "../hooks/useAuth";
+import Alert from "../components/Alert";
+import axios from "../config/axios";
 
 const Login = () => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [alert, setAlert] = useState({});
+
+    const navigate = useNavigate();
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+
+        if ([email, password].includes("")) {
+            setAlert({
+                message: "Debes llenar todos los campos",
+                error: true
+            });
+            return;
+        }
+
+        if (password.length < 8) {
+            setAlert({
+                message: "La contraseña debe tener al menos 8 carácteres",
+                error: true
+            })
+        }
+
+        setAlert({});
+
+        try {
+            const { data } = await axios.post("/veterinarians/login", {
+                email,
+                password
+            });
+
+            localStorage.setItem("token", data.token);
+
+            navigate("/admin");
+            
+        } catch (error) {
+            setAlert({
+                message: error.response.data.message,
+                error: true
+            });
+            return;
+        }
+    }
+
+    const { message } = alert;
+
     return (
         <>
             <div>
@@ -8,7 +59,11 @@ const Login = () => {
             </div>
             <div className="shadow-xl rounded-xl p-8 bg-white">
                 <div>
-                    <form className="flex flex-col gap-5">
+                    {message && <Alert alert={alert}></Alert>}
+                    <form 
+                        className="flex flex-col gap-5"
+                        onSubmit={handleSubmit}
+                    >
                         <div className="flex flex-col">
                             <label 
                                 htmlFor="email"
@@ -22,6 +77,7 @@ const Login = () => {
                                 type="email"
                                 placeholder="johndoe@gmail.com"
                                 className="bg-gray-50 border border-gray-300 rounded-[8px] p-2 mt-2"
+                                onChange={e => setEmail(e.target.value)}
                             />
                         </div>
 
@@ -37,6 +93,7 @@ const Login = () => {
                                 name="password"
                                 type="password"
                                 className="bg-gray-50 border border-gray-300 rounded-[8px] p-2 mt-2"
+                                onChange={e => setPassword(e.target.value)}
                             />
                         </div>
 
