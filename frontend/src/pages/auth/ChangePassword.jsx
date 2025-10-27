@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router'
-import axios from '../config/axios';
-import Alert from '../components/Alert';
+import axios from '../../config/axios';
+import Alert from '../../components/Alert';
 
 const ChangePassword = () => {
     const [password, setPassword] = useState("");

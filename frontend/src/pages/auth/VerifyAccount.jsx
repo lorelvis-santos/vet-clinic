@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router"
-import axios from "../config/axios";
-import Alert from "../components/Alert";
+import axios from "../../config/axios";
+import Alert from "../../components/Alert";
 
 const VerifyAccount = () => {
     const [confirmedAccount, setConfirmedAccount] = useState(false);

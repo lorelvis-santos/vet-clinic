@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import useAuth from "../hooks/useAuth";
-import Alert from "../components/Alert";
-import axios from "../config/axios";
+import useAuth from "../../hooks/useAuth";
+import Alert from "../../components/Alert";
+import axios from "../../config/axios";
 
 const Login = () => {
     const [email, setEmail] = useState("");
