@@ -4,6 +4,7 @@ import axios from "../config/axios";
 const AuthContext = createContext();
 
 const AuthProvider = ({children}) => {
+    const [loading, setLoading] = useState(true);
     const [auth, setAuth] = useState({});
 
     useEffect(() => {
@@ -11,6 +12,7 @@ const AuthProvider = ({children}) => {
             const token = localStorage.getItem("token");
 
             if (!token) {
+                setLoading(false);
                 return;
             }
 
@@ -28,8 +30,9 @@ const AuthProvider = ({children}) => {
                 setAuth(data);
             } catch {
                 setAuth({});
-                return;
             }
+            
+            setLoading(false);
         }
 
         authenticateUser();
@@ -39,7 +42,8 @@ const AuthProvider = ({children}) => {
         <AuthContext.Provider
             value={{
                 auth,
-                setAuth
+                setAuth,
+                loading
             }}
         >
             {children}
