@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate, Navigate } from "react-router";
+import { Link, useNavigate, Navigate, useLocation } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import Alert from "../../components/Alert";
 import axios from "../../config/axios";
@@ -11,6 +11,13 @@ const Login = () => {
 
     const { auth, setAuth } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const previousLocation = location.state?.from;
+
+    const from = previousLocation ? `${previousLocation.pathname || ""}${previousLocation.search || ""}${previousLocation.hash || ""}` : "/admin";
+
+    console.log(from);
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -40,10 +47,12 @@ const Login = () => {
 
             const { user } = data;
 
+            sessionStorage.removeItem("logout_reason");
             localStorage.setItem("token", user.token);
+
             setAuth(user);
 
-            navigate("/admin");
+            navigate(from, { replace: true });
             
         } catch (error) {
             console.log(error);
@@ -60,7 +69,7 @@ const Login = () => {
     return (
         <>
             {auth?._id ?
-                <Navigate to="/admin" /> : (
+                <Navigate to={from} replace /> : (
                     <>
                         <div>
                             <h1 className="text-indigo-600 font-black text-6xl">Inicia sesión y administra tus {""} <span className="text-gray-800">pacientes</span></h1>

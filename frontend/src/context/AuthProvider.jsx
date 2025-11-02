@@ -40,7 +40,34 @@ const AuthProvider = ({children}) => {
 
     const logout = () => {
         localStorage.removeItem("token");
+        sessionStorage.setItem("logout_reason", "manual");
         setAuth({});
+    }
+
+    const updateProfile = async profile => {
+        const token = localStorage.getItem("token");
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            }
+        }
+
+        try {
+            const { data } = await axios.put(`/veterinarians/profile`, {profile}, config);
+
+            setAuth(data.profile);
+
+            return {
+                message: "Datos guardados correctamente",
+                error: false
+            }
+        } catch (error) {
+            return {
+                message: error.response.data.message,
+                error: true
+            }
+        }
     }
 
     return (
@@ -49,7 +76,8 @@ const AuthProvider = ({children}) => {
                 auth,
                 setAuth,
                 loading,
-                logout
+                logout,
+                updateProfile
             }}
         >
             {children}
