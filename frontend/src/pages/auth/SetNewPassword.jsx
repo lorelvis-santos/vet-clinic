@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router'
 import axios from '../../config/axios';
 import Alert from '../../components/Alert';
 
-const ChangePassword = () => {
+const SetNewPassword = () => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState('');
     const [alert, setAlert] = useState({});
@@ -151,4 +151,4 @@ const ChangePassword = () => {
     )
 }
 
-export default ChangePassword
+export default SetNewPassword
