@@ -7,14 +7,18 @@ const PatientsContext = createContext();
 const PatientsProvider = ({children}) => {
     const [patients, setPatients] = useState([]);
     const [patient, setPatient] = useState({});
+    const [loading, setLoading] = useState(true);
     const { auth } = useAuth();
 
     useEffect(() => {
         const getPatients = async () => {
             try {
+                setLoading(true);
+                
                 const token = localStorage.getItem("token");
 
                 if (!token) {
+                    setLoading(false);
                     return;
                 }
 
@@ -28,6 +32,7 @@ const PatientsProvider = ({children}) => {
                 const { data } = await axios("/patients", config);
 
                 setPatients(data.patients);
+                setLoading(false);
             } catch (error) {
                 console.error(error);
             }
@@ -99,7 +104,8 @@ const PatientsProvider = ({children}) => {
                 savePatient,
                 deletePatient,
                 patient,
-                setEditing
+                setEditing,
+                loading
             }}
         >
             {children}    

@@ -2,11 +2,11 @@ import usePatients from "../hooks/usePatients";
 import Patient from "./Patient";
 
 const PatientsList = () => {
-    const { patients } = usePatients();
+    const { patients, loading } = usePatients();
 
     return (
         <>
-            { patients.length ? 
+            { !loading && patients.length ? 
                 (
                     <>
                         <h2 className="font-bold text-gray-700 text-3xl text-center">Tus pacientes</h2>
