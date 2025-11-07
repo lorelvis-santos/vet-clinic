@@ -6,7 +6,7 @@ const Patients = () => {
     const [showForm, setShowForm] = useState(false);
 
     return (
-        <div className="flex flex-col md:flex-row mx-auto justify-center">
+        <div className="flex flex-col md:flex-row mx-auto justify-center gap-6">
             <div className="md:w-1/2 lg:w-2/5">
                 <button 
                     type="button"
