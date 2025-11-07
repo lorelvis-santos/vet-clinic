@@ -70,6 +70,33 @@ const AuthProvider = ({children}) => {
         }
     }
 
+    const updatePassword = async (currentPassword, newPassword) => {
+        const token = localStorage.getItem("token");
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            }
+        }
+
+        try {
+            await axios.put(`/veterinarians/change-password`, {
+                currentPassword,
+                newPassword
+            }, config);
+
+            return {
+                message: "Datos guardados correctamente",
+                error: false
+            }
+        } catch (error) {
+            return {
+                message: error.response.data.message,
+                error: true
+            }
+        }
+    }
+
     return (
         <AuthContext.Provider
             value={{
@@ -77,7 +104,8 @@ const AuthProvider = ({children}) => {
                 setAuth,
                 loading,
                 logout,
-                updateProfile
+                updateProfile,
+                updatePassword
             }}
         >
             {children}
